@@ -50,6 +50,7 @@ const menu = () => {
           break;
         case "View Roles":
           console.log("Role DB call");
+          allRoles();
           break;
         case "Add Department":
           console.log("add department call");
@@ -74,7 +75,20 @@ const menu = () => {
 
 const allEmplooyees = () => {
   connection.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary FROM employee, role, department WHERE employee.id = role.id = department.id",
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department, role.salary FROM employee, role, department WHERE employee.id = role.id = department.id",
+    (err, res) => {
+      if (err) throw err;
+
+      // Log all results of the SELECT statement
+      console.table(res);
+      connection.end();
+    }
+  );
+};
+
+const allRoles = () => {
+  connection.query(
+    "SELECT role.id, role.title, department.department, role.salary FROM role, department WHERE role.id = department.id",
     (err, res) => {
       if (err) throw err;
 
