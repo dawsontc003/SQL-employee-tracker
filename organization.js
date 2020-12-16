@@ -47,6 +47,7 @@ const menu = () => {
           break;
         case "View Departments":
           console.log("department DB call");
+          allDepartments();
           break;
         case "View Roles":
           console.log("Role DB call");
@@ -54,6 +55,7 @@ const menu = () => {
           break;
         case "Add Department":
           console.log("add department call");
+          addDepartment();
           break;
         case "Add Role":
           console.log("add role call");
@@ -81,7 +83,7 @@ const allEmplooyees = () => {
 
       // Log all results of the SELECT statement
       console.table(res);
-      connection.end();
+      menu();
     }
   );
 };
@@ -94,10 +96,56 @@ const allRoles = () => {
 
       // Log all results of the SELECT statement
       console.table(res);
-      connection.end();
+      menu();
     }
   );
 };
+
+const allDepartments = () => {
+  connection.query(
+    "SELECT department.id, department.department, role.title, role.salary FROM department, role WHERE department.id = role.id",
+    (err, res) => {
+      if (err) throw err;
+
+      // Log all results of the SELECT statement
+      console.table(res);
+      menu();
+    }
+  );
+};
+
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "what is the new department name?",
+        name: "department",
+      },
+    ])
+    .then(({ department }) => {
+      connection.query(
+        `INSERT INTO department (department) VALUES ("${department}");`,
+        (err, res) => {
+          if (err) throw err;
+
+          // Log all results of the SELECT statement
+          console.log(res);
+        }
+      );
+    });
+};
+// const allEmplooyees = () => {
+//   connection.query(
+//     `INSERT INTO department (department) VALUES (${department})`,
+//     (err, res) => {
+//       if (err) throw err;
+
+//       // Log all results of the SELECT statement
+//       console.log(res);
+//     }
+//   );
+// };
 
 // const allEmplooyees = () => {
 //   connection.query(
