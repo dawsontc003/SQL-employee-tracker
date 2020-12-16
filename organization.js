@@ -43,6 +43,7 @@ const menu = () => {
       switch (action) {
         case "View Employees":
           console.log("employee DB call");
+          allEmplooyees();
           break;
         case "View Departments":
           console.log("department DB call");
@@ -71,12 +72,15 @@ const menu = () => {
     });
 };
 
-// const menu = () => {
-//   connection.query("SELECT name FROM colleges", (err, res) => {
-//     if (err) throw err;
+const allEmplooyees = () => {
+  connection.query(
+    "SELECT id, first_name, last_name FROM employee",
+    (err, res) => {
+      if (err) throw err;
 
-//     // Log all results of the SELECT statement
-//     console.log(res);
-//     connection.end();
-//   });
-// };
+      // Log all results of the SELECT statement
+      console.log(res);
+      connection.end();
+    }
+  );
+};
