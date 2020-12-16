@@ -74,13 +74,26 @@ const menu = () => {
 
 const allEmplooyees = () => {
   connection.query(
-    "SELECT id, first_name, last_name FROM employee",
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary FROM employee, role, department WHERE employee.id = role.id = department.id",
     (err, res) => {
       if (err) throw err;
 
       // Log all results of the SELECT statement
-      console.log(res);
+      console.table(res);
       connection.end();
     }
   );
 };
+
+// const allEmplooyees = () => {
+//   connection.query(
+//     "SELECT id, first_name, last_name FROM employee",
+//     (err, res) => {
+//       if (err) throw err;
+
+//       // Log all results of the SELECT statement
+//       console.log(res);
+//       connection.end();
+//     }
+//   );
+// };
