@@ -122,18 +122,62 @@ const addDepartment = () => {
         message: "what is the new department name?",
         name: "department",
       },
+      {
+        type: "input",
+        message: "what is the department id?",
+        name: "department_id",
+      },
+      {
+        type: "input",
+        message: "provide a title position?",
+        name: "title",
+      },
+      {
+        type: "input",
+        message: "salary for this position?",
+        name: "salary",
+      },
     ])
-    .then(({ department }) => {
+    .then(({ title, salary, department_id, department }) => {
       connection.query(
-        `INSERT INTO department (department) VALUES ("${department}");`,
-        (err, res) => {
+        "INSERT INTO department SET ?",
+        {
+          department,
+        },
+        (err) => {
           if (err) throw err;
-
-          // Log all results of the SELECT statement
-          console.log(res);
         }
       );
+      connection.query(
+        "INSERT INTO role SET ?",
+        {
+          title,
+          salary,
+          department_id,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log(`Department added ${department}`);
+          menu();
+        }
+      );
+      console.log(title, salary, id, department);
     });
+  // .then(({ title, salary, id, department }) => {
+  // connection.query(
+  //   "INSERT INTO role SET ?",
+  //   {
+  //     title,
+  //     salary,
+  //     id,
+  //   },
+  //   (err) => {
+  //     if (err) throw err;
+  //     console.log(`Department added ${department}`);
+  //     menu();
+  //   }
+  // );
+  // });
 };
 // const allEmplooyees = () => {
 //   connection.query(
@@ -159,3 +203,16 @@ const addDepartment = () => {
 //     }
 //   );
 // };
+
+// connection.query(
+//         "INSERT INTO chores SET ?",
+//         {
+//           chore,
+//           difficulty,
+//         },
+//         (err) => {
+//           if (err) throw err;
+//           console.log(`Chore added ${chore}`);
+//           menu();
+//         }
+//       );
