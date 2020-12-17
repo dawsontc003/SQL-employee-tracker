@@ -59,9 +59,11 @@ const menu = () => {
           break;
         case "Add Role":
           console.log("add role call");
+          addRole();
           break;
         case "Add Employee":
           console.log("add employee call");
+          addEmployee();
           break;
         case "Update Employee Role":
           console.log("update employee call");
@@ -122,23 +124,8 @@ const addDepartment = () => {
         message: "what is the new department name?",
         name: "department",
       },
-      {
-        type: "input",
-        message: "what is the department id?",
-        name: "department_id",
-      },
-      {
-        type: "input",
-        message: "provide a title position?",
-        name: "title",
-      },
-      {
-        type: "input",
-        message: "salary for this position?",
-        name: "salary",
-      },
     ])
-    .then(({ title, salary, department_id, department }) => {
+    .then(({ department }) => {
       connection.query(
         "INSERT INTO department SET ?",
         {
@@ -148,6 +135,32 @@ const addDepartment = () => {
           if (err) throw err;
         }
       );
+
+      console.log(department);
+      menu();
+    });
+};
+
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "provide a title for the new position?",
+        name: "title",
+      },
+      {
+        type: "input",
+        message: "salary for this position?",
+        name: "salary",
+      },
+      {
+        type: "input",
+        message: "what is the department id?",
+        name: "department_id",
+      },
+    ])
+    .then(({ title, salary, department_id }) => {
       connection.query(
         "INSERT INTO role SET ?",
         {
@@ -157,27 +170,47 @@ const addDepartment = () => {
         },
         (err) => {
           if (err) throw err;
-          console.log(`Department added ${department}`);
+          console.log(`Role added ${title}`);
           menu();
         }
       );
-      console.log(title, salary, id, department);
     });
-  // .then(({ title, salary, id, department }) => {
-  // connection.query(
-  //   "INSERT INTO role SET ?",
-  //   {
-  //     title,
-  //     salary,
-  //     id,
-  //   },
-  //   (err) => {
-  //     if (err) throw err;
-  //     console.log(`Department added ${department}`);
-  //     menu();
-  //   }
-  // );
-  // });
+};
+
+const addEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "employee first name?",
+        name: "first_name",
+      },
+      {
+        type: "input",
+        message: "employee last name?",
+        name: "last_name",
+      },
+      {
+        type: "input",
+        message: "what is the role id?",
+        name: "role_id",
+      },
+    ])
+    .then(({ first_name, last_name, role_id }) => {
+      connection.query(
+        "INSERT INTO employee SET ?",
+        {
+          first_name,
+          last_name,
+          role_id,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log(`employee added ${first_name}`);
+          menu();
+        }
+      );
+    });
 };
 // const allEmplooyees = () => {
 //   connection.query(
