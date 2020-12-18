@@ -80,7 +80,7 @@ const menu = () => {
 
 const allEmplooyees = () => {
   connection.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department, role.salary, employee.manager_id FROM employee, role, department WHERE employee.id = role.id = department.id",
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.department, employee.manager_id FROM employee LEFT JOIN role ON employee.id =role.id JOIN department ON department.id = role.id",
     (err, res) => {
       if (err) throw err;
 
