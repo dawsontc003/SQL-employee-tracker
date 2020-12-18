@@ -67,6 +67,7 @@ const menu = () => {
           break;
         case "Update Employee Role":
           console.log("update employee call");
+          updateEmployee();
           break;
         case "Exit":
           console.log("Exit app");
@@ -212,6 +213,84 @@ const addEmployee = () => {
       );
     });
 };
+// Need to figure out how to display employees in inquirer prompt.
+const updateEmployee = () => {
+  connection.query("SELECT * FROM employee", (err, res) => {
+    if (err) throw err;
+
+    // Log all results of the SELECT statement
+    console.log(res);
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Select employee to update",
+          choices() {
+            const choiceArray = [];
+            res.forEach(({ first_name }) => {
+              choiceArray.push(first_name);
+            });
+            return choiceArray;
+          },
+          name: "employeeUpdate",
+        },
+        {
+          type: "input",
+          message: "Employee id #?",
+          name: "id",
+        },
+        {
+          type: "input",
+          message: "Input title change?",
+          name: "roleUpdate",
+        },
+        {
+          type: "input",
+          message: "New salary?",
+          name: "newSalary",
+        },
+      ])
+      // need to complete update to sql database for title and salary maybe department too
+      .then(({ employeeUpdate, id, roleUpdate, newSalary }) => {
+        connection.query(
+          "UPDATE role SET ? WHERE ?",
+          [
+            {
+              title: roleUpdate,
+              salary: newSalary,
+            },
+            {
+              id: id,
+            },
+          ],
+          (err) => {
+            if (err) throw err;
+
+            menu();
+          }
+        );
+      });
+  });
+};
+//--------------------------------------------------------------------
+// connection.query(
+//   "UPDATE auctions SET ? WHERE ?",
+//   [
+//     {
+//       highest_bid: answer.bid,
+//     },
+//     {
+//       id: chosenItem.id,
+//     },
+//   ],
+//   (error) => {
+//     if (error) throw err;
+//     console.log("Bid placed successfully!");
+//     start();
+//   }
+// );
+
+// -----------------------------------------------------------------------
 // const allEmplooyees = () => {
 //   connection.query(
 //     `INSERT INTO department (department) VALUES (${department})`,
