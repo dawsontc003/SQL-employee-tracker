@@ -80,7 +80,7 @@ const menu = () => {
 
 const allEmplooyees = () => {
   connection.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department, role.salary FROM employee, role, department WHERE employee.id = role.id = department.id",
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department, role.salary, employee.manager_id FROM employee, role, department WHERE employee.id = role.id = department.id",
     (err, res) => {
       if (err) throw err;
 
@@ -93,7 +93,7 @@ const allEmplooyees = () => {
 
 const allRoles = () => {
   connection.query(
-    "SELECT role.id, role.title, department.department, role.salary FROM role, department WHERE role.id = department.id",
+    "SELECT role.id, role.title, role.salary, department.department FROM role LEFT JOIN department ON role.id = department.id",
     (err, res) => {
       if (err) throw err;
 
@@ -106,7 +106,7 @@ const allRoles = () => {
 
 const allDepartments = () => {
   connection.query(
-    "SELECT department.id, department.department, role.title, role.salary FROM department, role WHERE department.id = role.id",
+    "SELECT department.id, department.department, role.id, role.title, role.salary FROM department LEFT JOIN role ON department.id = role.id",
     (err, res) => {
       if (err) throw err;
 
@@ -219,7 +219,7 @@ const updateEmployee = () => {
     if (err) throw err;
 
     // Log all results of the SELECT statement
-    console.log(res);
+
     inquirer
       .prompt([
         {
@@ -251,7 +251,7 @@ const updateEmployee = () => {
         },
       ])
       // need to complete update to sql database for title and salary maybe department too
-      .then(({ employeeUpdate, id, roleUpdate, newSalary }) => {
+      .then(({ id, roleUpdate, newSalary }) => {
         connection.query(
           "UPDATE role SET ? WHERE ?",
           [
@@ -272,59 +272,3 @@ const updateEmployee = () => {
       });
   });
 };
-//--------------------------------------------------------------------
-// connection.query(
-//   "UPDATE auctions SET ? WHERE ?",
-//   [
-//     {
-//       highest_bid: answer.bid,
-//     },
-//     {
-//       id: chosenItem.id,
-//     },
-//   ],
-//   (error) => {
-//     if (error) throw err;
-//     console.log("Bid placed successfully!");
-//     start();
-//   }
-// );
-
-// -----------------------------------------------------------------------
-// const allEmplooyees = () => {
-//   connection.query(
-//     `INSERT INTO department (department) VALUES (${department})`,
-//     (err, res) => {
-//       if (err) throw err;
-
-//       // Log all results of the SELECT statement
-//       console.log(res);
-//     }
-//   );
-// };
-
-// const allEmplooyees = () => {
-//   connection.query(
-//     "SELECT id, first_name, last_name FROM employee",
-//     (err, res) => {
-//       if (err) throw err;
-
-//       // Log all results of the SELECT statement
-//       console.log(res);
-//       connection.end();
-//     }
-//   );
-// };
-
-// connection.query(
-//         "INSERT INTO chores SET ?",
-//         {
-//           chore,
-//           difficulty,
-//         },
-//         (err) => {
-//           if (err) throw err;
-//           console.log(`Chore added ${chore}`);
-//           menu();
-//         }
-//       );
